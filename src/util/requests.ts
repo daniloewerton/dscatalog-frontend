@@ -1,6 +1,15 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import qs from 'qs'; // lib que converte as credenciais em url encoded // yarn add qs @types/qs
 import history from './history';
+import jwtDecode from 'jwt-decode';
+
+type Role = 'ROLE_OPERATOR' | 'ROLE_ADMIN';
+
+type TokenData = {
+    exp: number;
+    user_name: string;
+    authorities: Role[];
+}
 
 type LoginResponse = {
     access_token: string;
@@ -81,3 +90,18 @@ axios.interceptors.response.use(function (response) {
     }
     return Promise.reject(error);
   });
+
+//   lib para decodificar o token jwt -> yarn add jwt-decode @types/jwt-decode
+export const getTokenData = () : TokenData | undefined => {
+
+    try {
+        return jwtDecode(getAuthData().access_token) as TokenData;
+    } catch(error) {
+        return undefined;
+    }
+}
+
+export const isAuthenticated = () : boolean => {
+    const tokenData = getTokenData();
+    return (tokenData && tokenData.exp * 1000 > Date.now()) ? true : false;
+}
