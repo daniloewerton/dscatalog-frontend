@@ -126,4 +126,9 @@ export const hasAnyRoles = (roles: Role[]) : boolean => {
         }
     }
     return false;
+
+    // Maneira alternativa de resolver o problema acima
+    // if(tokenData !== undefined) {
+    //     return roles.some(role => tokenData?.authorities.includes(role));
+    // }
 }
