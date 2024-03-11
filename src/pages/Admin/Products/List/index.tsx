@@ -24,7 +24,7 @@ const List = () => {
     requestBackend(config).then((response) => {
       setPage(response.data);
     });
-  }, []);
+  }, [page]);
 
   return (
     <div className="product-crud-container">

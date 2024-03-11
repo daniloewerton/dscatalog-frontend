@@ -29,6 +29,7 @@ const Form = () => {
     requestBackend(config).then((response) => {
       console.log(response.data);
     });
+    history.push('/admin/products');
   };
 
   const handleCancel = () => {
