@@ -56,6 +56,10 @@
         padding-bottom: 0;
     }
 
+    .product-crud-card-top-container {
+        width: 200px;
+    }
+
     .product-crud-card-buttons-container {
         flex-direction: column-reverse;
         justify-content: center;
