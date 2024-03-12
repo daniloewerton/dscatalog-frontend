@@ -1,7 +1,7 @@
 import ProductCrudCard from 'pages/Admin/Products/ProductCrudCard';
 
 import './styles.css';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { SpringPage } from 'types/vendor/spring';
 import { Product } from 'types/product';
@@ -12,6 +12,10 @@ const List = () => {
   const [page, setPage] = useState<SpringPage<Product>>();
 
   useEffect(() => {
+    getProducts();
+  }, []);
+
+  const getProducts = () => {
     const config: AxiosRequestConfig = {
       method: 'GET',
       url: '/products',
@@ -24,7 +28,7 @@ const List = () => {
     requestBackend(config).then((response) => {
       setPage(response.data);
     });
-  }, [page]);
+  };
 
   return (
     <div className="product-crud-container">
@@ -40,7 +44,10 @@ const List = () => {
         {page?.content.map((product) => {
           return (
             <div key={product.id} className="col-sm-6 col-md-12">
-              <ProductCrudCard product={product} />
+              <ProductCrudCard
+                product={product}
+                onDelete={() => getProducts()}
+              />
             </div>
           );
         })}
