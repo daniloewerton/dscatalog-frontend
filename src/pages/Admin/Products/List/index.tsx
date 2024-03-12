@@ -1,7 +1,7 @@
 import ProductCrudCard from 'pages/Admin/Products/ProductCrudCard';
 
 import './styles.css';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { SpringPage } from 'types/vendor/spring';
 import { Product } from 'types/product';
