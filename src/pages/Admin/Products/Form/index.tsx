@@ -7,6 +7,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Select from 'react-select';
 import { Category } from 'types/category';
+import CurrencyInput from 'react-currency-input-field';
 
 type UrlParams = {
   productId: string;
@@ -47,11 +48,15 @@ const Form = () => {
   }, [isEditing, productId, setValue]);
 
   const onSubmit = (formData: Product) => {
+    const data = {
+      ...formData,
+      price: String(formData.price).replace(',', '.'),
+    };
 
     const config: AxiosRequestConfig = {
       method: isEditing ? 'PUT' : 'POST',
       url: isEditing ? `/products/${productId}` : '/products',
-      data: formData,
+      data,
       withCredentials: true,
     };
     requestBackend(config).then((response) => {
@@ -102,9 +107,7 @@ const Form = () => {
                       classNamePrefix="product-crud-select"
                       isMulti
                       getOptionLabel={(category) => category.name}
-                      getOptionValue={(category) =>
-                        String(category.id)
-                      }
+                      getOptionValue={(category) => String(category.id)}
                     />
                   )}
                 />
@@ -115,18 +118,25 @@ const Form = () => {
                 )}
               </div>
 
+              {/* yarn add react-currency-input-field - lib para campo preço com formatação de casas decimais*/}
+
               <div className="margin-bottom-30">
                 <div className="mb-4">
-                  <input
-                    {...register('price', {
-                      required: 'Campo obrigatório',
-                    })}
-                    type="text"
-                    className={`form-control base-input ${
-                      errors.price ? 'is-invalid' : ''
-                    }`}
-                    placeholder="Insira o preço do produto"
+                  <Controller
                     name="price"
+                    rules={{ required: 'Campo obrigatório' }}
+                    control={control}
+                    render={({ field }) => (
+                      <CurrencyInput
+                        placeholder="Preço"
+                        className={`form-control base-input ${
+                          errors.price ? 'is-invalid' : ''
+                        }`}
+                        disableGroupSeparators={true}
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      />
+                    )}
                   />
                   <div className="invalid-feedback d-block">
                     {errors.price?.message}
